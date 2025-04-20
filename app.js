@@ -75,7 +75,6 @@ function addEventListenerToTiles () {
                 };
                 scoreEl.innerText = `Score: ${currentScore}`;
                 highscoreEl.innerText = `Highscore: ${highScore}`;
-                feedbackWiederAusblenden()
                 applyColorToTiles();
                 applySimilarColor();
             } else {
