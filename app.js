@@ -2,6 +2,20 @@
 let baseColor;
 let AllItems;
 let correct_item_ID;
+let feedbackEl = document.getElementById("feedback");
+let scoreEl = document.getElementById("score");
+let highscoreEl = document.getElementById("highscore");
+let currentScore = 0;
+let highScore = 0;
+
+
+//check if highscore in local storage
+if (localStorage.getItem("highscore") === null) {
+    // True if no such key in local storage so just move on
+} else {
+    highScore = parseInt(localStorage.getItem("highscore"));
+    highscoreEl.innerText = `Highscore: ${highScore}`;
+}
 
 // basisfarbe erzeugen random
 function getRandomColor() {
@@ -47,21 +61,53 @@ function applySimilarColor() {
     chosen_item.style.backgroundColor = getSlightlySimilarColor()
 }
 
-//clickable machen die tiles und game logik 
+//Game Logik color tiles 
 function addEventListenerToTiles () {
     AllItems.forEach(function(item) {
         item.addEventListener("click", function() {
             if (item.id === correct_item_ID) {
-                console.log("RICHTIG!!");
+                //feedbackEl.innerText = "Richtig!✅";
+                currentScore = currentScore + 1;
+                if (highScore < currentScore) {
+                    highScore = currentScore;
+                    //speichern highscore in local storage (string)
+                    localStorage.setItem("highscore", highScore);
+                };
+                scoreEl.innerText = `Score: ${currentScore}`;
+                highscoreEl.innerText = `Highscore: ${highScore}`;
+                feedbackWiederAusblenden()
                 applyColorToTiles();
                 applySimilarColor();
-
             } else {
-                console.log("FALSCH!!!");
+                //feedbackEl.innerText = "Falsch!❌";
+                //wackeln des divs bei klick
+                wrongClickedTile = document.getElementById(item.id);
+                addShakeCSS(wrongClickedTile);
+                currentScore = 0;
+                scoreEl.innerText = `Score: ${currentScore}`;
             }
         });
     });
 }
+
+//function feedbackWiederAusblenden() {
+    setTimeout(() => {
+        feedbackEl.innerText = "";
+    }, 1000);
+//}
+
+function addShakeCSS (elementToAddShake) {
+    elementToAddShake.classList.add("shake");
+    setTimeout(() => {
+        elementToAddShake.classList.remove("shake");
+    }, 300);
+}
+
+
+
+
+
+
 
 
 applyColorToTiles()

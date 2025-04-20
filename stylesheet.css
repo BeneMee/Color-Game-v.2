@@ -16,18 +16,43 @@ body {
 
 #item_wrapper {
     display: grid;
-    grid-template-columns: repeat(3, 100px);
-    grid-template-rows: repeat(2, 100px);
-    text-align: center;
-    gap: 20px;
+    grid-template-columns: repeat(3, 1fr); /* gleich breite Spalten */
+    gap: 4vw;
+    width: 90vw;
+    max-width: 800px;
 }
 
 .item {
+    aspect-ratio: 1 / 1;
+    width: 100%;
     background-color: rgb(192, 120, 120);
     border-radius: 8%;
 }
 
 .item:hover {
-    transform: scale(1.1);
+    transform: scale(1.0);
     cursor: pointer;
+}
+
+#score_wrapper {
+    display: flex;
+    gap: 40px;
+}
+
+
+@keyframes tilt-shaking {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(5deg); }
+    50% { transform: rotate(0deg); }
+    75% { transform: rotate(-5deg); }
+    100% { transform: rotate(0deg); }
+}
+
+.shake {
+    animation: tilt-shaking 0.3s;
+}
+
+#score_wrapper h2, #question_wrapper h2 {
+    font-size: 5vw;
+    text-align: center;
 }
