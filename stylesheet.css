@@ -2,10 +2,13 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
+    padding: 2vh;
+    box-sizing: border-box;
     font-family: Arial, Helvetica, sans-serif;
 }
+
 
 #game_wrapper {
     display: flex;
@@ -53,6 +56,30 @@ body {
 }
 
 #score_wrapper h2, #question_wrapper h2 {
-    font-size: 5vw;
+    font-size: 4vw;
     text-align: center;
+}
+
+#button_wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 4px;
+    max-width: 400px;
+    margin: auto;
+}
+
+#endlos_button {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+#zeit_button {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+#zeit_vorbei_text {
+    grid-column: 1 / 2;
+    grid-row: 2;
 }
