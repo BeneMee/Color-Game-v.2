@@ -11,7 +11,7 @@ let AllItems;
 let correct_item_ID;
 let currentScore = 0;
 let highScore = 0;
-let startSecond = 5;
+let startSecond = 30;
 let countdown = startSecond; 
 let countdownID;
 let gameModus = null;
