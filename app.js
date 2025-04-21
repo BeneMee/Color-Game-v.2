@@ -44,6 +44,10 @@ function startGame() {
 
     if (gameModus === "endlos") {
         checkLocalStorageEndlosModus();
+        clearInterval(countdownID);
+        countdownID = null;
+        countdown = startSecond;
+        timerEl.innerText = ``;
     } else {
         checkLocalStorageZeitModus();
         stoppuhr();
@@ -51,30 +55,29 @@ function startGame() {
 }
 
 function stoppuhr() {
-    console.log("stoppuhr wurde aufgerufen");
-    console.log(`das ist die ${countdownID}`)
     if (!countdownID) {
+        countdown = startSecond;
+        timerEl.innerText = `Zeit: ${countdown}`
         countdownID = setInterval(timerAblauf, 1000)
     }
 }
 
 function timerAblauf() {
-    console.log(countdown)
-    timerEl.innerText = `Zeit: ${countdown}`
-    countdown = countdown - 1
-    if (countdown === 0 ) {
-        console.log(countdown)
-        timerEl.innerText = `Zeit: ${countdown}`
-        countdown = startSecond;
+    countdown--; // erst runterzählen
+
+    if (countdown <= 0) {
+        timerEl.innerText = `Zeit: 0`;
         clearInterval(countdownID);
         countdownID = null;
+        countdown = startSecond;
         AllItems.forEach(function(item) {
             item.removeEventListener("click", handleTileClick);
         });
         listenerHinzugefuegt = false;
-        zeitAbgelaufenText.style.innerText = "ZEIT VORBEI!";
-        ///// funktioniert nicht zeit abgelaufen text
+        zeitAbgelaufenText.innerText = "Zeit abgelaufen .____. "; // ✅ korrekt gesetzt
+        return; // damit unten nichts mehr passiert
     }
+    timerEl.innerText = `Zeit: ${countdown}`;
 }
 
 //check if highscore in local storage
@@ -117,18 +120,83 @@ function applyColorToTiles() {
     });
 }
 //slightly andere Farbe erzeugen 
+// function getSlightlySimilarColor() {
+//     let veränderungswert = 30; // schwierigkeitsgrad
+//     let untereGrenze = 10;  // schwierigkeitsgrad
+//     let rgb_digits = baseColor.match(/\d+/g).map(Number);
+//     let index = Math.floor(Math.random() * 3);
+//     let veränderung = Math.random() < 0.5 ? -veränderungswert : veränderungswert;
+//     let neuerWert = Math.min(255, Math.max(0, rgb_digits[index] + veränderung));
+//     let differenz = Math.abs(rgb_digits[index] - neuerWert);
+    
+
+
+
+//     if (differenz < untereGrenze) {
+//         if (neuerWert + untereGrenze <= 255) {
+//             neuerWert += untereGrenze;
+//         } else {
+//             neuerWert -= untereGrenze;
+//         }
+//     };
+    
+//     rgb_digits[index] = neuerWert;
+    
+
+//     console.warn(differenz)
+//     console.warn(neuerWert)
+
+
+
+//     let r = rgb_digits[0];
+//     let g = rgb_digits[1];
+//     let b = rgb_digits[2];
+//     let slightlySimilarColor = `rgb(${r}, ${g}, ${b})`
+
+//     return slightlySimilarColor
+// }
+
+
+// CODE NOCHMAL PRÜFEN UND NACHVOLLZIEHEN / Schwierigkeitsgrad --
 function getSlightlySimilarColor() {
-    let rgb_digits = baseColor.match(/\d+/g).map(Number);
-    let index = Math.floor(Math.random() * 3)
-    let veränderung = Math.random() < 0.5 ? -30 : 30;
-    rgb_digits[index] = Math.min(255, Math.max(0, rgb_digits[index] + veränderung))
-    // keine werte > 0 > 255 möglich!
-    let r = rgb_digits[0];
-    let g = rgb_digits[1];
-    let b = rgb_digits[2];
-    let slightlySimilarColor = `rgb(${r}, ${g}, ${b})`
-    return slightlySimilarColor
+    const untereGrenze = 20;
+    const veränderungswert = 30;
+    const rgb_digits = baseColor.match(/\d+/g).map(Number);
+    const index = Math.floor(Math.random() * 3);
+    const originalWert = rgb_digits[index];
+
+    let neuerWert;
+    let maxPositive = Math.min(255 - originalWert, veränderungswert);
+    let maxNegative = Math.min(originalWert, veränderungswert);
+
+    let gültigeRichtungen = [];
+
+    if (maxPositive >= untereGrenze) gültigeRichtungen.push("hoch");
+    if (maxNegative >= untereGrenze) gültigeRichtungen.push("runter");
+
+    if (gültigeRichtungen.length === 0) {
+        neuerWert = originalWert; // Sonderfall: keine gültige Richtung (z. B. bei 0 oder 255)
+    } else {
+        let richtung = gültigeRichtungen[Math.floor(Math.random() * gültigeRichtungen.length)];
+        let abstand = Math.floor(Math.random() * (veränderungswert - untereGrenze + 1)) + untereGrenze;
+
+        if (richtung === "hoch") {
+            neuerWert = originalWert + abstand;
+        } else {
+            neuerWert = originalWert - abstand;
+        }
+    }
+
+    rgb_digits[index] = neuerWert;
+
+    const abstandFinal = Math.abs(neuerWert - originalWert);
+    console.warn(`Δ = ${abstandFinal} (von ${originalWert} → ${neuerWert})`);
+
+    const [r, g, b] = rgb_digits;
+    return `rgb(${r}, ${g}, ${b})`;
 }
+
+
 //slightly andere farbe auf eine random tile stylen
 function applySimilarColor() {
     let randomNumber = Math.floor(Math.random() * 6) + 1;
@@ -181,6 +249,17 @@ function addEventListenersToTiles() {
         item.addEventListener("click", handleTileClick);
     });
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
