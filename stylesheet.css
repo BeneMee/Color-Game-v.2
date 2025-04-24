@@ -9,6 +9,32 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Standard (Light Mode) */
+body {
+    background-color: white;
+    color: black;
+}
+
+  /* Dark Mode */
+body.darkmode {
+    background-color: #121212;
+    color: #eeeeee;  }
+
+.item.darkmode {
+    background-color: #333333;
+}
+
+#item_wrapper.darkmode {
+    background-color: #222;
+}
+
+#button_wrapper.darkmode button {
+    background-color: #121212;
+    color: white;
+    border: none;
+}
+
+
 
 #game_wrapper {
     display: flex;

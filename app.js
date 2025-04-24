@@ -16,6 +16,9 @@ let countdown = startSecond;
 let countdownID;
 let gameModus = null;
 let listenerHinzugefuegt = false;
+let wrongSound = "sounds/wrong-47985.mp3"
+let correctSound = "sounds/correct-156911.mp3"
+const darkmodeToggle = document.getElementById("darkmode_toggle");
 
 
 endlosButtonEl.addEventListener("click", function () {
@@ -28,6 +31,19 @@ zeitButtonEl.addEventListener("click", function () {
     gameModus = "zeitmodus";
     document.getElementById("modus_anzeige_wrapper").innerText = "Zeit Modus!";
     startGame();
+});
+
+darkmodeToggle.addEventListener("click", function () {
+    document.body.classList.toggle("darkmode");
+
+    // Optional: Items und Wrapper auch toggeln
+    document.getElementById("item_wrapper").classList.toggle("darkmode");
+    document.getElementById("button_wrapper").classList.toggle("darkmode");
+
+    // Alle Kacheln einzeln umschalten
+    document.querySelectorAll(".item").forEach(item => {
+        item.classList.toggle("darkmode");
+    });
 });
 
 
@@ -75,7 +91,7 @@ function timerAblauf() {
         });
         listenerHinzugefuegt = false;
         zeitAbgelaufenText.innerText = "Zeit abgelaufen .____. "; // ✅ korrekt gesetzt
-        return; // damit unten nichts mehr passiert
+        return; 
     }
     timerEl.innerText = `Zeit: ${countdown}`;
 }
@@ -156,11 +172,10 @@ function applyColorToTiles() {
 //     return slightlySimilarColor
 // }
 
-
 // CODE NOCHMAL PRÜFEN UND NACHVOLLZIEHEN / Schwierigkeitsgrad --
 function getSlightlySimilarColor() {
-    const untereGrenze = 20;
-    const veränderungswert = 30;
+    const untereGrenze = 35;
+    const veränderungswert = 50;
     const rgb_digits = baseColor.match(/\d+/g).map(Number);
     const index = Math.floor(Math.random() * 3);
     const originalWert = rgb_digits[index];
@@ -219,12 +234,14 @@ function handleTileClick(event) {
     if (clickedItem.id !== correct_item_ID) {
         // Falsch geklickt
         addShakeCSS(clickedItem);
+        playAudio(wrongSound);
         currentScore = 0;
         scoreEl.innerText = `Score: ${currentScore}`;
         return;
     }
 
     // Richtig geklickt
+    playAudio(correctSound);
     currentScore++;
     scoreEl.innerText = `Score: ${currentScore}`;
 
@@ -251,6 +268,9 @@ function addEventListenersToTiles() {
 }
 
 
+function playAudio(urlToSoundbit) {
+    new Audio(urlToSoundbit).play();
+}
 
 
 
@@ -269,67 +289,6 @@ function addEventListenersToTiles() {
 
 
 
-
-
-
-
-
-
-// //Game Logik color tiles und speichern highscore ENDLOS MODUS
-// function addEventListenerToTilesEndlosModus () {
-//     AllItems.forEach(function(item) {
-//         item.addEventListener("click", function() {
-//             if (item.id === correct_item_ID) {
-//                 //feedbackEl.innerText = "Richtig!✅";
-//                 currentScore = currentScore + 1;
-//                 if (highScore < currentScore) {
-//                     highScore = currentScore;
-//                     //speichern highscore in local storage (string)
-//                     localStorage.setItem("highscoreEndlos", highScore);
-//                 };
-//                 scoreEl.innerText = `Score: ${currentScore}`;
-//                 highscoreEl.innerText = `Highscore: ${highScore}`;
-//                 applyColorToTiles();
-//                 applySimilarColor();
-//             } else {
-//                 //feedbackEl.innerText = "Falsch!❌";
-//                 //wackeln des divs bei klick
-//                 wrongClickedTile = document.getElementById(item.id);
-//                 addShakeCSS(wrongClickedTile);
-//                 currentScore = 0;
-//                 scoreEl.innerText = `Score: ${currentScore}`;
-//             }
-//         });
-//     });
-// }
-
-// //Game Logik color tiles und speichern highscore ZEIT MODUS
-// function addEventListenerToTilesZeitModus () {
-//     AllItems.forEach(function(item) {
-//         item.addEventListener("click", function() {
-//             if (item.id === correct_item_ID) {
-//                 //feedbackEl.innerText = "Richtig!✅";
-//                 currentScore = currentScore + 1;
-//                 if (highScore < currentScore) {
-//                     highScore = currentScore;
-//                     //speichern highscore in local storage (string)
-//                     localStorage.setItem("highscoreZeit", highScore);
-//                 };
-//                 scoreEl.innerText = `Score: ${currentScore}`;
-//                 highscoreEl.innerText = `Highscore: ${highScore}`;
-//                 applyColorToTiles();
-//                 applySimilarColor();
-//             } else {
-//                 //feedbackEl.innerText = "Falsch!❌";
-//                 //wackeln des divs bei klick
-//                 wrongClickedTile = document.getElementById(item.id);
-//                 addShakeCSS(wrongClickedTile);
-//                 currentScore = 0;
-//                 scoreEl.innerText = `Score: ${currentScore}`;
-//             }
-//         });
-//     });
-// }
 
 
 
